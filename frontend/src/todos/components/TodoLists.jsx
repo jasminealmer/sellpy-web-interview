@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import ReceiptIcon from '@mui/icons-material/Receipt'
 import { TodoListForm } from './TodoListForm'
-import { fetchTodoLists } from '../helper'
+import { fetchTodoLists, saveTodoList } from '../helper'
 
 export const TodoLists = ({ style }) => {
   const [todoLists, setTodoLists] = useState({})
@@ -19,6 +19,15 @@ export const TodoLists = ({ style }) => {
   useEffect(() => {
     fetchTodoLists(setTodoLists)
   }, [])
+
+  const handleSaveTodoList = async (id, { todos }) => {
+    const listToUpdate = todoLists[id]
+    setTodoLists({
+      ...todoLists,
+      [id]: { ...listToUpdate, todos },
+    })
+    await saveTodoList(id, { todos })
+  }
 
   if (!Object.keys(todoLists).length) return null
   return (
@@ -43,11 +52,7 @@ export const TodoLists = ({ style }) => {
           key={activeList} // use key to make React recreate component to reset internal state
           todoList={todoLists[activeList]}
           saveTodoList={(id, { todos }) => {
-            const listToUpdate = todoLists[id]
-            setTodoLists({
-              ...todoLists,
-              [id]: { ...listToUpdate, todos },
-            })
+            handleSaveTodoList(id, { todos })
           }}
         />
       )}
