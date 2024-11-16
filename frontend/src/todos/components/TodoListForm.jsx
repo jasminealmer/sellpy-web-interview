@@ -1,10 +1,19 @@
 import AddIcon from '@mui/icons-material/Add'
 import { Button, Card, CardActions, CardContent, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Todo } from './Todo'
 
 export const TodoListForm = ({ todoList, saveTodoList }) => {
   const [todos, setTodos] = useState(todoList.todos)
+  const timeout = useRef(null)
+
+  useEffect(() => {
+    clearTimeout(timeout.current)
+
+    timeout.current = setTimeout(() => {
+      saveTodoList(todoList.id, { todos })
+    }, 1000)
+  }, [todos])
 
   const handleSubmit = (event) => {
     event.preventDefault()
