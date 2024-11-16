@@ -11,6 +11,10 @@ export const TodoListForm = ({ todoList, saveTodoList }) => {
     saveTodoList(todoList.id, { todos })
   }
 
+  const allTodosCompleted = () => {
+    return todos.every((todo) => todo.completed)
+  }
+
   return (
     <Card sx={{ margin: '0 1rem' }}>
       <CardContent>
@@ -22,6 +26,11 @@ export const TodoListForm = ({ todoList, saveTodoList }) => {
           {todos.map((_, index) => (
             <Todo key={index} index={index} todos={todos} setTodos={setTodos} />
           ))}
+          {allTodosCompleted() && (
+            <Typography padding={'1rem'} variant='h6'>
+              All todos completed. Nice work!
+            </Typography>
+          )}
           <CardActions>
             <Button
               type='button'
